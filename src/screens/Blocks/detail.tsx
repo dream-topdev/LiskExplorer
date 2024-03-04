@@ -21,7 +21,15 @@ export const BlockDetailScreen: FC<Props> = ({ route }) => {
           value={Intl.NumberFormat().format(block.height)}
           copyEnabled
         />
+        <LiskInlineInfo label="Generator Addr" value={String(block.generator.address)} copyEnabled/>
+        <LiskInlineInfo label="Generator name" value={String(block.generator.name)} copyEnabled/>
+        <LiskInlineInfo label="State Root" value={String(block.stateRoot)} copyEnabled/>
+        <LiskInlineInfo label="Validator Hash" value={String(block.validatorsHash)} copyEnabled/>
+        <LiskInlineInfo label="Number of trx" value={String(block.numberOfTransactions)}/>
+        <LiskInlineInfo label="Number of Events" value={String(block.numberOfEvents)}/>
+        <LiskInlineInfo label="Number of Assets" value={String(block.numberOfAssets)}/>
         <LiskInlineInfo label="Timestamp" value={formatTime(block.timestamp)} copyEnabled/>
+        <LiskInlineInfo label="Total Burnt" value={block.totalBurnt} copyEnabled/>
         <LiskInlineInfo label="Network Fee" value={block.networkFee} copyEnabled/>
         <LiskInlineInfo
           label="Reward"
