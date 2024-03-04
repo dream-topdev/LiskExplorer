@@ -3,10 +3,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { BlockListScreen } from "../screens/Blocks/list";
 import { TransactionListScreen } from "../screens/Transaction/list";
+import { EthereumInfoScreen } from "../screens/Ethereum/info";
 
 export type HomeStackParamList = {
   BlockList: undefined;
   TransactionList: undefined;
+  EthereumInfo: undefined;
 };
 
 const Tab = createBottomTabNavigator<HomeStackParamList>();
@@ -37,6 +39,16 @@ export const HomeStack = () => {
           ),
         }}
         component={TransactionListScreen}
+      />
+      <Tab.Screen
+        name="EthereumInfo"
+        options={{
+          title: "Ethereum Info",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="information-circle-outline" color={color} size={size} />
+          ),
+        }}
+        component={EthereumInfoScreen}
       />
     </Tab.Navigator>
   );
