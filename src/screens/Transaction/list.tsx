@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Toast from 'react-native-root-toast';
+import Toast from "react-native-root-toast";
 import { View } from "react-native";
 
 import TabScreenWrapper from "../../components/TabScreenWrapper";
@@ -10,6 +10,7 @@ import { TransactionListItem } from "../../components/TransactionListItem";
 import { MainStackParamList } from "../../navigation/main";
 import MyFlatList from "../../components/MyFlatList";
 import { scaleVertical } from "../../helpers/scale";
+import { LiskTransaction } from "../../types/transaction.type";
 
 export const TransactionListScreen = () => {
   const navigator = useNavigation<StackNavigationProp<MainStackParamList>>();
@@ -18,7 +19,7 @@ export const TransactionListScreen = () => {
   const onEndReached = () => {
     if (offset >= total) {
       // no more to load
-      Toast.show('You reached end of the transactions.', {
+      Toast.show("You reached end of the transactions.", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
         shadow: true,
@@ -50,22 +51,32 @@ export const TransactionListScreen = () => {
     loadTransactions();
   }, []);
 
+  const renderItem = useCallback(
+    ({ item }: { item: LiskTransaction }) => (
+      <TransactionListItem
+        key={item.id}
+        data={item}
+        onPress={() => {
+          navigator.navigate("TransactionDetail", { trx: item });
+        }}
+      />
+    ),
+    []
+  );
+
+  const renderSeparator = useCallback(
+    () => <View style={{ height: scaleVertical(8) }} />,
+    []
+  );
+
   return (
     <TabScreenWrapper includePadding title="Transactions">
       <MyFlatList
         data={txs}
         isLoading={loading}
-        renderItem={({ item }) => (
-          <TransactionListItem
-            key={item.id}
-            data={item}
-            onPress={() => {
-              navigator.navigate("TransactionDetail", { trx: item });
-            }}
-          />
-        )}
+        renderItem={renderItem}
         onEndReached={onEndReached}
-        ItemSeparatorComponent={() => <View style={{height: scaleVertical(8)}}/>}        
+        ItemSeparatorComponent={renderSeparator}
       />
     </TabScreenWrapper>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { View } from "react-native";
@@ -10,6 +10,7 @@ import TabScreenWrapper from "../../components/TabScreenWrapper";
 import { MainStackParamList } from "../../navigation/main";
 import MyFlatList from "../../components/MyFlatList";
 import { scaleVertical } from "../../helpers/scale";
+import { LiskBlock } from "../../types/block.type";
 
 export const BlockListScreen = () => {
   const { blocks, loading, error } = useBlocksStore();
@@ -28,23 +29,31 @@ export const BlockListScreen = () => {
     }
   }, [error]);
 
+  const renderItem = useCallback(
+    ({ item }: { item: LiskBlock }) => (
+      <BlockListItem
+        key={item.id}
+        data={item}
+        onPress={() => {
+          navigator.navigate("BlockDetail", { block: item });
+        }}
+      />
+    ),
+    []
+  );
+
+  const renderSeparator = useCallback(
+    () => <View style={{ height: scaleVertical(8) }} />,
+    []
+  );
+
   return (
     <TabScreenWrapper includePadding title="Blocks">
       <MyFlatList
         isLoading={loading}
         data={blocks}
-        renderItem={({ item }) => (
-          <BlockListItem
-            key={item.id}
-            data={item}
-            onPress={() => {
-              navigator.navigate("BlockDetail", { block: item });
-            }}
-          />
-        )}
-        ItemSeparatorComponent={() => (
-          <View style={{ height: scaleVertical(8) }} />
-        )}
+        renderItem={renderItem}
+        ItemSeparatorComponent={renderSeparator}
       />
     </TabScreenWrapper>
   );
