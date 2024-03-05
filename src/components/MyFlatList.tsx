@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import { ActivityIndicator, FlatList, FlatListProps, StyleSheet, View } from 'react-native';
 
@@ -22,6 +21,7 @@ const MyFlatList = React.forwardRef<FlatList, Props>(
     ) : (
       <View style={styles.container}>
         <FlatList
+          testID='test-myflatlist'
           ref={ref}
           data={data}
           keyExtractor={(item) => item.id}
@@ -30,6 +30,7 @@ const MyFlatList = React.forwardRef<FlatList, Props>(
         />
         {isLoading && (
           <View
+            testID='test-loading-indicator'
             style={[
               styles.loadingContainer,
               {
